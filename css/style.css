@@ -66,6 +66,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  background-image: url("../img/fundo.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 h1,
@@ -91,7 +96,9 @@ a {
 
 hr {
   margin: 1rem 0 1.5rem;
-  border-top-color: var(--line);
+  border: none;
+  background-color: #999999be;
+  height: 1px;
   opacity: 1;
 }
 
