@@ -9,6 +9,7 @@
     <script src="<?php echo BASEURL; ?>js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo BASEURL; ?>js/all.min.js"></script>
     <script src="<?php echo BASEURL; ?>js/main.js"></script>
+    <script src="<?php echo BASEURL; ?>js/virar-pagina.js"></script>
     </body>
 
 </html>

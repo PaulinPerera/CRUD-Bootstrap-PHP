@@ -1,25 +1,21 @@
 <?php
     include("function.php");
     index();
+    $titulo_pagina = 'Revistas';
     include HEADER_TEMPLATE;
 ?>
 
 <header class="page-header">
     <h2>Revistas</h2>
     <div class="page-actions">
+        <?php if (logado()): ?>
         <a class="btn btn-primary" href="add.php"><i class="fa-solid fa-plus"></i> Nova Revista</a>
+        <?php endif; ?>
         <a class="btn btn-outline-secondary" href="index.php"><i class="fa-solid fa-refresh"></i> Atualizar</a>
     </div>
 </header>
 
-<?php if (!empty($_SESSION['message'])): ?>
-    <div class="alert alert-<?php echo $_SESSION['type']; ?> alert-dismissible fade show" role="alert">
-        <?php echo $_SESSION['message']; ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-    </div>
-    <?php //clear_messages(); ?> 
-    <!-- clear_messages -> limpa as msg´s ($_SESSION['message'] e $_SESSION['type'])-->
-<?php endif; ?>
+
 
 <hr>
 
@@ -74,12 +70,14 @@
                     <td class="actions text-end">
                         <a href="view.php?id=<?php echo $revista['id']; ?>" class="btn btn-sm btn-outline-secondary"><i
                                 class="fa fa-eye"></i> Visualizar</a>
+                        <?php if (logado()): ?>
                         <a href="edit.php?id=<?php echo $revista['id']; ?>" class="btn btn-sm btn-outline-primary"><i
                                 class="fa fa-pencil"></i> Editar</a>
                         <a href="#" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-modal"
-                            data-revista="<?= $revista['id']; ?>" data-nome="<?= htmlspecialchars($revista['nome']); ?>">
+                            data-id="<?= $revista['id']; ?>" data-nome="<?= htmlspecialchars($revista['nome']); ?>" data-tipo="Revista">
                             <i class="fa fa-trash"></i> Excluir
                         </a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -92,5 +90,5 @@
 </table>
 </div>
 
-<?php include "modal.php"; ?>
+<?php if (logado()) include "modal.php"; ?>
 <?php include FOOTER_TEMPLATE; ?>

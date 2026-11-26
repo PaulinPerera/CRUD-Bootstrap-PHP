@@ -27,3 +27,10 @@ if ( !defined('DBAPI') )
 
 const HEADER_TEMPLATE = ABSPATH . "inc/header.php";
 const FOOTER_TEMPLATE = ABSPATH . "inc/footer.php";
+
+/** buffer de saída: permite redirecionar (header Location) mesmo depois de incluir o cabeçalho */
+ob_start();
+
+/** sessão, login, mensagens e CSRF + funções de apoio */
+require_once ABSPATH . "inc/auth.php";
+require_once ABSPATH . "inc/util.php";

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>QuadriVerse - Revistas</title>
+    <title><?php echo h('QuadriVerse - ' . ($titulo_pagina ?? 'Revistas')); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="keywords" content="">
@@ -20,6 +20,8 @@
 
     <link rel="stylesheet" href="<?php echo BASEURL; ?>css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo BASEURL; ?>css/all.min.css">
+
+    <link rel="stylesheet" href="<?php echo BASEURL; ?>css/virar-pagina.css">
 
     <!-- style.css deve ser o último -->
     <link rel="stylesheet" href="<?php echo BASEURL; ?>css/style.css">
@@ -78,6 +80,7 @@
 
                         <ul class="dropdown-menu">
 
+                            <?php if (logado()) : ?>
                             <li>
                                 <a class="dropdown-item"
                                     href="<?php echo BASEURL; ?>revistas/add.php">
@@ -87,13 +90,14 @@
 
                                 </a>
                             </li>
+                            <?php endif; ?>
 
                             <li>
                                 <a class="dropdown-item"
                                     href="<?php echo BASEURL; ?>revistas">
 
                                     <i class="fa-solid fa-book"></i>
-                                    Gerenciar Revistas
+                                    <?php echo logado() ? 'Gerenciar Revistas' : 'Ver Revistas'; ?>
 
                                 </a>
                             </li>
@@ -102,7 +106,9 @@
 
                     </li>
 
-                    <!-- CLIENTES -->
+                    <!-- CLIENTES - SOMENTE LOGADO -->
+                    <?php if (logado()) : ?>
+
                     <li class="nav-item dropdown">
 
                         <a class="nav-link dropdown-toggle"
@@ -142,9 +148,11 @@
 
                     </li>
 
+                    <?php endif; ?>
+
                     <!-- USUÁRIOS - SOMENTE ADMIN -->
                     <?php
-                    if (isset($_SESSION['user']) && $_SESSION['user'] == 'admin') :
+                    if (eh_admin()) :
                     ?>
 
                         <li class="nav-item dropdown">
@@ -193,9 +201,16 @@
                 <!-- LOGIN / LOGOUT -->
                 <ul class="navbar-nav">
 
-                    <?php if (isset($_SESSION['user'])) : ?>
+                    <?php if (logado()) : ?>
 
                         <!-- USUÁRIO LOGADO -->
+                        <li class="nav-item">
+                            <span class="nav-link user-info">
+                                <i class="fa-solid fa-user"></i>
+                                <?php echo h($_SESSION['nome'] ?? $_SESSION['user']); ?>
+                            </span>
+                        </li>
+
                         <li class="nav-item">
 
                             <a class="nav-link"
@@ -235,3 +250,4 @@
 
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="container" id="conteudo">
+    <?php mostra_flash(); ?>

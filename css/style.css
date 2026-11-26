@@ -203,6 +203,13 @@ footer.container p {
   background-color: rgba(255, 255, 255, 0.16);
 }
 
+/* Nome do usuário logado: mesmo visual dos itens do menu, mas sem ser clicável */
+.app-navbar .nav-link.user-info,
+.app-navbar .nav-link.user-info:hover {
+  background-color: transparent;
+  cursor: default;
+}
+
 .app-navbar .nav-link i,
 .app-navbar .nav-link .svg-inline--fa {
   margin-right: 0.35rem;
@@ -527,6 +534,37 @@ footer.container p {
   border-radius: 0.35rem;
   box-shadow: var(--shadow-sm);
   transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+/* Foto de cliente (quadrada) */
+.foto-cliente {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.foto-detalhe {
+  display: block;
+  width: 100%;
+  max-width: 15rem;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin-bottom: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Formulário de login: estreito e centralizado */
+main > form.login-form {
+  max-width: 26rem;
+  margin: 1.5rem auto 0;
 }
 
 a:hover > .capa-thumb {

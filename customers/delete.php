@@ -1,15 +1,13 @@
 <?php
 include "function.php";
 
-try {
-    if (isset($_GET['id'])) {
-        delete($_GET['id']);
-    } //else {
-    //     die("ERRO: ID não definido.");
-    // }
-} catch (Exception $e) {
-    $_SESSION["message"] = "Nao foi possivel realizar a operacao.<br>{$e->getMessage()}";
-    $_SESSION["type"] = "danger";
-    header("location:index.php");
+exige_login();
+
+// excluir só por POST (formulário do modal) e com o token CSRF: um link ou imagem de outro site não apaga nada
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    redireciona('index.php');
 }
-?>
+
+exige_csrf('index.php');
+
+delete($_POST['id'] ?? null);

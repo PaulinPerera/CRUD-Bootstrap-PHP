@@ -1,21 +1,22 @@
 <?php
 include "function.php";
-add(); //Todo: ajeitar essa função
+exige_login();
+add();
+$titulo_pagina = 'Novo Cliente';
 include HEADER_TEMPLATE;
 ?>
 
 <h2>Novo Cliente</h2>
 
-
-<!--Todo: Ajeitar os campos para cliente-->
 <form action="add.php" method="post" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
     <!-- area de campos do form -->
     <hr>
     <div class="row">
         <div class="col-md-4 col-lg-3">
             <div class="capa-preview">
-                <img src="<?php echo capa(''); ?>" id="preview" data-original="<?php echo capa(''); ?>"
-                    class="capa-detalhe" alt="Prévia da capa">
+                <img src="<?php echo foto(''); ?>" id="preview" data-original="<?php echo foto(''); ?>"
+                    class="foto-detalhe" alt="Prévia da foto">
             </div>
         </div>
 
@@ -29,27 +30,28 @@ include HEADER_TEMPLATE;
 
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="ano">Ano</label>
-                    <input type="number" class="form-control" id="ano" name="cliente[ano]" min="1" required>
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cliente[cpf]" maxlength="14"
+                        inputmode="numeric" placeholder="000.000.000-00" required>
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="edicao">Edição</label>
-                    <input type="number" class="form-control" id="edicao" name="cliente[edicao]" min="1" required>
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" class="form-control" id="telefone" name="cliente[telefone]" maxlength="15"
+                        placeholder="(00) 00000-0000" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="descricao">Descrição</label>
-                    <textarea class="form-control" id="descricao" name="cliente[descricao]" rows="4"
-                        maxlength="1000"></textarea>
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="cliente[email]" maxlength="100" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="foto">Foto da capa</label>
+                    <label for="foto">Foto</label>
                     <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                 </div>
             </div>

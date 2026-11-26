@@ -9,21 +9,11 @@ $revista = null;
 $filtro = "";
 
 /**
- *  Formatar as datas
- */
-function formatData($data, $formato)
-{
-	$dt = new Datetime($data, new DateTimeZone("America/Sao_Paulo"));// "-0300"
-	return $dt->format($formato);
-}
-
-/**
  *  Endereço (URL) da capa; revista sem imagem usa a SemImagem.png
  */
 function capa($foto)
 {
-	$arquivo = empty($foto) ? "SemImagem.png" : rawurlencode($foto);
-	return htmlspecialchars(BASEURL . "img/" . $arquivo);
+	return imagem_url($foto);
 }
 
 /**
@@ -43,28 +33,23 @@ function dados_form()
 }
 
 /**
- *  Envio da imagem da capa para a pasta img/.
- *  Retorna o nome do arquivo salvo ou null (nenhuma imagem enviada / arquivo inválido).
+ *  Confere os dados no servidor (o navegador pode ser burlado). Retorna a mensagem de erro ou null.
  */
-function upload_capa()
+function valida_revista($dados)
 {
-	if (empty($_FILES['foto']['name']) || $_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
-		return null;
+	if ($dados['nome'] === '') {
+		return 'Informe o nome da revista.';
 	}
-
-	$permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-	$extensao = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
-
-	// getimagesize() devolve false quando o arquivo não é uma imagem de verdade
-	if (!in_array($extensao, $permitidas) || !getimagesize($_FILES['foto']['tmp_name'])) {
-		return null;
+	if (mb_strlen($dados['nome']) > 50) {
+		return 'O nome pode ter no máximo 50 caracteres.';
 	}
-
-	// nome único: uma capa nova nunca sobrescreve a de outra revista
-	$arquivo = uniqid('capa_') . '.' . $extensao;
-	move_uploaded_file($_FILES['foto']['tmp_name'], ABSPATH . 'img/' . $arquivo);
-
-	return $arquivo;
+	if ($dados['ano'] < 1) {
+		return 'Informe um ano válido.';
+	}
+	if ($dados['edicao'] < 1) {
+		return 'Informe uma edição válida.';
+	}
+	return null;
 }
 
 /**
@@ -84,7 +69,9 @@ function index()
 function view($id = null)
 {
 	global $revista;
-	$revista = find('tabelarevista', $id);
+
+	// find() sem id devolveria a tabela inteira; aqui só interessa uma revista
+	$revista = ((int) $id > 0) ? find('tabelarevista', $id) : null;
 }
 
 /**
@@ -94,15 +81,28 @@ function add()
 {
 	if (!empty($_POST['revista']) && is_array($_POST['revista'])) {
 
-		$today = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+		exige_csrf('add.php');
 
 		$revista = dados_form();
+
+		if ($erro = valida_revista($revista)) {
+			flash($erro, 'danger');
+			redireciona('add.php');
+		}
+
+		$foto = upload_imagem('capa_');
+		if ($foto === false) {
+			flash(MSG_IMAGEM_INVALIDA, 'danger');
+			redireciona('add.php');
+		}
+
+		$today = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+
 		$revista['datacadastro'] = $today->format("Y-m-d H:i:s");
-		$revista['foto'] = upload_capa() ?? ""; // sem imagem: fica vazio e a listagem mostra a SemImagem.png
+		$revista['foto'] = $foto ?? ""; // sem imagem: fica vazio e a listagem mostra a SemImagem.png
 
 		save('tabelarevista', $revista); // 'tabelarevista' -> nome da tabela; $revista -> associative array
-		header('location: index.php'); // output buffer
-		exit;
+		redireciona('index.php');
 	}
 }
 
@@ -113,31 +113,46 @@ function edit()
 {
 	global $revista;
 
-	if (isset($_GET['id'])) {
-
-		$id = $_GET['id'];
-
-		if (!empty($_POST['revista']) && is_array($_POST['revista'])) {
-
-			$dados = dados_form();
-
-			// só troca a capa se uma nova imagem foi enviada; senão a atual continua
-			$foto = upload_capa();
-			if ($foto) {
-				$dados['foto'] = $foto;
-			}
-
-			update("tabelarevista", $id, $dados);
-			header("location: index.php");
-			exit;
-		} else {
-
-			$revista = find("tabelarevista", $id);
-		}
-	} else {
-		header("location: index.php");
-		exit;
+	$id = (int) ($_GET['id'] ?? 0);
+	if ($id < 1) {
+		redireciona('index.php');
 	}
+
+	if (!empty($_POST['revista']) && is_array($_POST['revista'])) {
+
+		exige_csrf("edit.php?id=$id");
+
+		$dados = dados_form();
+
+		if ($erro = valida_revista($dados)) {
+			flash($erro, 'danger');
+			redireciona("edit.php?id=$id");
+		}
+
+		// só troca a capa se uma nova imagem foi enviada; senão a atual continua
+		$foto = upload_imagem('capa_');
+		if ($foto === false) {
+			flash(MSG_IMAGEM_INVALIDA, 'danger');
+			redireciona("edit.php?id=$id");
+		}
+
+		$atual = find("tabelarevista", $id);
+
+		if ($foto) {
+			$dados['foto'] = $foto;
+		}
+
+		update("tabelarevista", $id, $dados);
+
+		// capa antiga não serve mais: libera o espaço
+		if ($foto && $atual && !empty($atual['foto'])) {
+			apaga_imagem($atual['foto']);
+		}
+
+		redireciona("index.php");
+	}
+
+	$revista = find("tabelarevista", $id);
 }
 
 /**
@@ -145,10 +160,16 @@ function edit()
  */
 function delete($id = null)
 {
+	$atual = ((int) $id > 0) ? find('tabelarevista', $id) : null;
+
 	remove('tabelarevista', $id);
 
-	header("location: index.php");
-	exit;
+	// apaga também o arquivo da capa (só se foi enviado pelo sistema)
+	if ($atual && !empty($atual['foto'])) {
+		apaga_imagem($atual['foto']);
+	}
+
+	redireciona("index.php");
 }
 
 ?>

@@ -1,12 +1,15 @@
 <?php
 include "function.php";
+exige_login();
 add();
+$titulo_pagina = 'Nova Revista';
 include HEADER_TEMPLATE;
 ?>
 
 <h2>Nova Revista</h2>
 
 <form action="add.php" method="post" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
     <!-- area de campos do form -->
     <hr>
     <div class="row">

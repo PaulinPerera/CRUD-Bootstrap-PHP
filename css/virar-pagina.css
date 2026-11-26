@@ -1,0 +1,36 @@
+/* ===== Virar página (estilo "papel solto") ===== */
+html.vp-turning { overflow-x: hidden; }
+
+/* A folha cobre a janela inteira (navbar + conteúdo + rodapé), por cima de tudo */
+.vp-overlay {
+  position: fixed; left: 0; top: 0;
+  pointer-events: none; z-index: 2000;
+}
+.vp-strip {
+  position: absolute; top: 0; left: 0; height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.vp-face {
+  position: absolute; inset: 0; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--paper, #f7f5f3);
+}
+.vp-face.vp-back {
+  transform: rotateY(180deg);
+  background: #ece6dd;
+  background-image: radial-gradient(rgba(0,0,0,.05) 1px, transparent 1.3px);
+  background-size: 7px 7px;
+}
+.vp-inner { position: relative; height: 100%; overflow: hidden; }
+/* retrato da página: imita o <body> (coluna flex) para o layout ficar idêntico ao real */
+.vp-page {
+  position: absolute; left: 0; margin: 0;
+  display: flex; flex-direction: column;
+}
+.vp-shade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
+.vp-under-shadow {
+  position: fixed; left: 0; top: 0; z-index: 1999; pointer-events: none; opacity: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.55), transparent 70%);
+}

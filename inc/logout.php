@@ -1,11 +1,11 @@
 <?php
     include("../config.php");
-    try {
-        session_start(); 
-        session_destroy(); 
-        header("Location: " . BASEURL . "index.php");
-    } catch (Exception $e) {
-        $_SESSION["message"] = "Ocorreu um erro: *" . $e->GetMessage();
-        $_SESSION["type"] = "danger";
-    }
-?>
+
+    // encerra a sessão e começa uma nova, só para poder mostrar o aviso de saída
+    $_SESSION = [];
+    session_destroy();
+    session_start();
+    session_regenerate_id(true);
+
+    flash("Você saiu da sua conta.", "info");
+    redireciona(BASEURL . "index.php");

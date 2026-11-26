@@ -1,6 +1,8 @@
 <?php
 include "function.php";
+exige_login();
 edit();
+$titulo_pagina = 'Editar Revista';
 include HEADER_TEMPLATE;
 ?>
 
@@ -8,6 +10,7 @@ include HEADER_TEMPLATE;
 
 <?php if ($revista): ?>
 <form action="edit.php?id=<?= (int) $revista['id']; ?>" method="post" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
     <!-- area de campos do form -->
     <hr>
     <div class="row">

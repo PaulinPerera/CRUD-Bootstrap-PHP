@@ -1,20 +1,23 @@
 <?php
 include "function.php";
+exige_login();
 edit();
+$titulo_pagina = 'Editar Cliente';
 include HEADER_TEMPLATE;
 ?>
 
-<h2>Atualizar Revista</h2>
+<h2>Atualizar Cliente</h2>
 
-<?php if ($revista): ?>
-<form action="edit.php?id=<?= (int) $revista['id']; ?>" method="post" enctype="multipart/form-data">
+<?php if ($cliente): ?>
+<form action="edit.php?id=<?= (int) $cliente['id']; ?>" method="post" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
     <!-- area de campos do form -->
     <hr>
     <div class="row">
         <div class="col-md-4 col-lg-3">
             <div class="capa-preview">
-                <img src="<?php echo capa($revista['foto']); ?>" id="preview" data-original="<?php echo capa($revista['foto']); ?>"
-                    class="capa-detalhe" alt="Capa de <?php echo htmlspecialchars($revista['nome']); ?>">
+                <img src="<?php echo foto($cliente['foto']); ?>" id="preview" data-original="<?php echo foto($cliente['foto']); ?>"
+                    class="foto-detalhe" alt="Foto de <?php echo htmlspecialchars($cliente['nome']); ?>">
             </div>
         </div>
 
@@ -22,42 +25,44 @@ include HEADER_TEMPLATE;
             <div class="row">
                 <div class="form-group col-md-8">
                     <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" name="revista[nome]" maxlength="50" required
-                        value="<?php echo htmlspecialchars($revista['nome']); ?>">
+                    <input type="text" class="form-control" id="nome" name="cliente[nome]" maxlength="50" required
+                        value="<?php echo htmlspecialchars($cliente['nome']); ?>">
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="datacadastro">Data de Cadastro</label>
                     <input type="date" class="form-control" id="datacadastro" disabled
-                        value="<?php echo formatData($revista['datacadastro'], "Y-m-d"); ?>">
+                        value="<?php echo formatData($cliente['datacadastro'], "Y-m-d"); ?>">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="ano">Ano</label>
-                    <input type="number" class="form-control" id="ano" name="revista[ano]" min="1" required
-                        value="<?php echo $revista['ano']; ?>">
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cliente[cpf]" maxlength="14"
+                        inputmode="numeric" placeholder="000.000.000-00" required
+                        value="<?php echo htmlspecialchars($cliente['cpf']); ?>">
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="edicao">Edição</label>
-                    <input type="number" class="form-control" id="edicao" name="revista[edicao]" min="1" required
-                        value="<?php echo $revista['edicao']; ?>">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" class="form-control" id="telefone" name="cliente[telefone]" maxlength="15"
+                        placeholder="(00) 00000-0000" required
+                        value="<?php echo htmlspecialchars($cliente['telefone']); ?>">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="descricao">Descrição</label>
-                    <textarea class="form-control" id="descricao" name="revista[descricao]" rows="4"
-                        maxlength="1000"><?php echo htmlspecialchars($revista['descricao']); ?></textarea>
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="cliente[email]" maxlength="100" required
+                        value="<?php echo htmlspecialchars($cliente['email']); ?>">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="foto">Nova foto da capa (opcional)</label>
+                    <label for="foto">Nova foto (opcional)</label>
                     <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                 </div>
             </div>
@@ -77,7 +82,7 @@ include HEADER_TEMPLATE;
 </form>
 <?php else: ?>
     <hr>
-    <div class="alert alert-danger" role="alert">Revista não encontrada!</div>
+    <div class="alert alert-danger" role="alert">Cliente não encontrado!</div>
     <a href="index.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-rotate-left"></i> Voltar</a>
 <?php endif; ?>
 

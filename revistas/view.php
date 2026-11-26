@@ -2,7 +2,7 @@
 include('function.php');
 view($_GET['id'] ?? null);
 
-
+$titulo_pagina = 'Revista';
 include(HEADER_TEMPLATE);
 ?>
 
@@ -10,10 +10,6 @@ include(HEADER_TEMPLATE);
 
 <h2>Revista <?php echo $revista['id']; ?></h2>
 <hr>
-
-<?php if (!empty($_SESSION['message'])): ?>
-    <div class="alert alert-<?php echo $_SESSION['type']; ?>"><?php echo $_SESSION['message']; ?></div>
-<?php endif; ?>
 
 <div class="row g-4">
     <div class="col-md-4 col-lg-3">
@@ -47,8 +43,10 @@ include(HEADER_TEMPLATE);
 
 <div id="actions" class="row">
     <div class="col-md-12">
+        <?php if (logado()): ?>
         <a href="edit.php?id=<?php echo $revista['id']; ?>" class="btn btn-primary"><i
                 class="fa-solid fa-pen-to-square"></i> Editar</a>
+        <?php endif; ?>
         <a href="index.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-rotate-left"></i> Voltar</a>
     </div>
 

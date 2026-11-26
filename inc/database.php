@@ -215,10 +215,37 @@ function remove( $table = null, $id = null ) {
     }
   } catch (Exception $e) { 
 
-    $_SESSION["message"] = "Não foi possível realizar a operação:<br>{$e->GetMessage()}";
-    $_SESSION["type"] ="danger";
+    $_SESSION["message"] = "Não foi possível realizar a operação.";
+    $_SESSION["type"] = "danger";
   }
 
   close_database($database);
+}
+
+/**
+ *  Verifica se já existe um registro com esse valor na coluna (ex.: CPF, e-mail, login).
+ *  $ignorarId: id do próprio registro, para não acusar duplicidade na edição.
+ */
+function existe_valor($table, $column, $valor, $ignorarId = 0)
+{
+	$database = null;
+	$existe = false;
+
+	try {
+		$database = open_database();
+		$ignorarId = (int) $ignorarId;
+
+		$stmt = $database->prepare("SELECT id FROM $table WHERE $column = ? AND id <> ? LIMIT 1");
+		$stmt->bind_param("si", $valor, $ignorarId);
+		$stmt->execute();
+		$existe = $stmt->get_result()->num_rows > 0;
+	} catch (Exception $e) {
+		$existe = false;
+	}
+
+	if ($database) {
+		close_database($database);
+	}
+	return $existe;
 }
 ?>
