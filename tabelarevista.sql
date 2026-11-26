@@ -15,6 +15,16 @@ CREATE TABLE IF NOT EXISTS tabelarevista (
   descricao text NOT NULL
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=6;
 
+CREATE TABLE IF NOT EXISTS clientes (
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  nome varchar(50) NOT NULL,
+  foto varchar(255) NOT NULL,
+  cpf varchar(14) NOT NULL,
+  email varchar(100) NOT NULL,
+  telefone varchar(15) NOT NULL,
+  datacadastro datetime NOT NULL
+) DEFAULT CHARSET=utf8 AUTO_INCREMENT=6;
+
 INSERT IGNORE INTO `tabelarevista` (`id`, `nome`, `ano`, `edicao`, `datacadastro`, `foto`, `descricao`) VALUES
 (1, 'O Cavaleiro das Trevas', 1986, 1, '2026-06-11 12:00:00', 'batman_cavaleiro.png', 'Minissérie de Frank Miller que mostra um Batman envelhecido retornando à ativa para combater o crime em Gotham.'),
 (2, 'A Piada Mortal', 1988, 1, '2026-06-11 12:05:00', 'piada_mortal.png', 'Graphic novel que explora a relação entre Batman e Coringa, apresentando uma possível origem para o vilão.'),
