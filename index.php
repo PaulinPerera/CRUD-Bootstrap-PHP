@@ -19,18 +19,8 @@ include HEADER_TEMPLATE;
 
 <?php if (!$erro): ?>
 
-	<div class="row g-3">
-		<?php if (logado()): ?>
-			<div class="col-12 col-md-6 col-lg-4">
-				<a href="revistas/add.php" class="shortcut shortcut-primary">
-					<span class="shortcut-icon"><i class="fa-solid fa-plus"></i></span>
-					<span>
-						<span class="shortcut-title">Nova Revista</span>
-						<span class="shortcut-text">Cadastrar uma revista</span>
-					</span>
-				</a>
-			</div>
-		<?php endif; ?>
+	<div class="row g-3 m-2">
+		
 
 		<div class="col-12 col-md-6 col-lg-4">
 			<a href="revistas" class="shortcut">
@@ -44,6 +34,24 @@ include HEADER_TEMPLATE;
 
 		<?php if (logado()): ?>
 			<div class="col-12 col-md-6 col-lg-4">
+				<a href="revistas/add.php" class="shortcut shortcut-primary">
+					<span class="shortcut-icon"><i class="fa-solid fa-plus"></i></span>
+					<span>
+						<span class="shortcut-title">Nova Revista</span>
+						<span class="shortcut-text">Cadastrar uma revista</span>
+					</span>
+				</a>
+			</div>
+		<?php endif; ?>
+
+		
+
+		
+	</div>
+	<?php if (logado()): ?>
+	<div class="row g-3 m-2">
+		
+			<div class="col-12 col-md-6 col-lg-4">
 				<a href="customers/" class="shortcut">
 					<span class="shortcut-icon"><i class="fa-solid fa-users"></i></span>
 					<span>
@@ -52,9 +60,22 @@ include HEADER_TEMPLATE;
 					</span>
 				</a>
 			</div>
-		<?php endif; ?>
 
-		<?php if (eh_admin()): ?>
+			<div class="col-12 col-md-6 col-lg-4">
+				<a href="customers/add.php" class="shortcut shortcut-primary">
+					<span class="shortcut-icon"><i class="fa-solid fa-plus"></i></span>
+					<span>
+						<span class="shortcut-title">Novo Cliente</span>
+						<span class="shortcut-text">Cadastrar um cliente</span>
+					</span>
+				</a>
+			</div>
+		
+	</div>
+	<?php endif; ?>
+	<?php if (eh_admin()): ?>
+	<div class="row g-3 m-2">
+		
 			<div class="col-12 col-md-6 col-lg-4">
 				<a href="usuarios/" class="shortcut">
 					<span class="shortcut-icon"><i class="fa-solid fa-user-lock"></i></span>
@@ -64,8 +85,19 @@ include HEADER_TEMPLATE;
 					</span>
 				</a>
 			</div>
-		<?php endif; ?>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<a href="usuarios/add.php" class="shortcut shortcut-primary">
+					<span class="shortcut-icon"><i class="fa-solid fa-plus"></i></span>
+					<span>
+						<span class="shortcut-title">Novo Usuário</span>
+						<span class="shortcut-text">Cadastrar um usuário</span>
+					</span>
+				</a>
+			</div>
+		
 	</div>
+	<?php endif; ?>
 
 <?php else: ?>
 	<div class="alert alert-danger" role="alert">

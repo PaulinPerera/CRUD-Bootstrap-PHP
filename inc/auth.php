@@ -64,7 +64,7 @@ function logado()
 
 function eh_admin()
 {
-	return logado() && $_SESSION['user'] === 'admin';
+	return logado() && $_SESSION['nivel'] == 'admin';
 }
 
 /** Manda para o login quem não está conectado (e volta para cá depois de entrar) */

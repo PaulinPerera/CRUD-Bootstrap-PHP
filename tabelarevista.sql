@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   nome varchar(50) NOT NULL,
   user varchar(30) NOT NULL,
+  nivel varchar(20) NOT NULL DEFAULT 'user',
   password varchar(255) NOT NULL,
   datacadastro datetime NOT NULL,
   UNIQUE KEY uq_usuarios_user (user)
@@ -45,8 +46,12 @@ INSERT IGNORE INTO `tabelarevista` (`id`, `nome`, `ano`, `edicao`, `datacadastro
 (5, 'Homem-Aranha: A Última Caçada de Kraven', 1987, 1, '2026-06-11 12:20:00', 'spiderman_kraven.png', 'Saga em que Kraven derrota o Homem-Aranha e assume sua identidade em uma das histórias mais marcantes do personagem.');
 
 -- Administrador inicial:  login = admin   |   senha = admin123   (TROQUE a senha depois de entrar: Usuários > Editar)
-INSERT IGNORE INTO `usuarios` (`id`, `nome`, `user`, `password`, `datacadastro`) VALUES
-(1, 'Administrador', 'admin', '$2b$10$XxDDUHW7cvjc0NbS5O0IZOH9Fz6C8oRBUYpOPY2AjSl4UyE/2Z/rC', '2026-06-11 12:00:00');
+INSERT IGNORE INTO `usuarios` (`id`, `nome`, `user`, `nivel`, `password`, `datacadastro`) VALUES
+(1, 'Administrador', 'admin', 'admin', '$2b$10$XxDDUHW7cvjc0NbS5O0IZOH9Fz6C8oRBUYpOPY2AjSl4UyE/2Z/rC', '2026-06-11 12:00:00');
+
+-- Usuário comum: login = joao | senha = Usuario123
+INSERT IGNORE INTO `usuarios` (`nome`, `user`, `nivel`, `password`, `datacadastro`) VALUES
+('João da Silva', 'joao', 'user', '$2y$10$Umuy1/ZIN9H0NGNORtKdIOyugaiy5McA0L/p9ReDpgLgKPSHtTFhm', NOW());
 
 -- Clientes de exemplo
 INSERT IGNORE INTO `clientes` (`id`, `nome`, `foto`, `cpf`, `email`, `telefone`, `datacadastro`) VALUES

@@ -26,7 +26,7 @@
         $db = open_database();
 
         // prepare + bind_param: o que foi digitado nunca vira parte do SQL
-        $stmt = $db->prepare("SELECT id, nome, user, password FROM usuarios WHERE user = ? LIMIT 1");
+        $stmt = $db->prepare("SELECT id, nome, user, nivel, password FROM usuarios WHERE user = ? LIMIT 1");
         $stmt->bind_param("s", $usuario);
         $stmt->execute();
         $dados = $stmt->get_result()->fetch_assoc();
@@ -48,6 +48,7 @@
         $_SESSION['id'] = (int) $dados['id'];
         $_SESSION['nome'] = $dados['nome'];
         $_SESSION['user'] = $dados['user'];
+        $_SESSION['nivel'] = $dados['nivel'] ?? 'user';
 
         flash("Bem-vindo, " . h($dados['nome']) . "!", "success");
 
